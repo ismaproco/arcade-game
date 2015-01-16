@@ -10,3 +10,9 @@ I found that it will be easier to create an object to keep the values of the sta
 
 Then I create the Stage object that will help me to set the values of the stage in terms of rows and columns. Also it will keep track of the player inside the grid, so it will be easier to calculate the collisions by just evaluating one of the coordinates.
 
+
+Resources
+============================================
+Used this url to learn the Random between to numbers in Javascript
+
+http://stackoverflow.com/questions/4959975/generate-random-value-between-two-numbers-in-javascript
