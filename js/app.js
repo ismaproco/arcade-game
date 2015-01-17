@@ -30,7 +30,6 @@ var Stage = function(  ){
 
     // enemies position in the stage
     this.enemies = [];
-
 }
 
 
@@ -44,6 +43,8 @@ var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
 
     this.generateValues();
+
+    this.collisionArea = { radius: 20 , x: 5 , y: 5 };
 }
 
 Enemy.prototype.generateValues = function()
@@ -90,14 +91,24 @@ var Player = function( x , y ) {
     //start position
     this.x = x || 0;
     this.y = y || 0;
+
+    //use circles as detection collision
+    this.collisionArea = { radius: 20 , x: 50 , y: 100 };
 }
+
+Player.prototype.collisionDet
 
 Player.prototype.update = function( dt ){
 
 }
 
 Player.prototype.render = function( dt ){
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    var sprite = Resources.get(this.sprite);
+    ctx.drawImage( sprite , this.x, this.y);
+    ctx.beginPath();
+    ctx.arc( this.collisionArea.x + this.x , this.collisionArea.y + this.y , this.collisionArea.radius , 0, 2 * Math.PI , false );
+    ctx.fill();
+    ctx.stroke();
 }
 
 Player.prototype.handleInput = function( input ){
