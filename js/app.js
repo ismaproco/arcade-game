@@ -4,10 +4,12 @@ var Stage = function(  ){
     this.width = 500;
     this.height = 500;
 
+    
+
     //set the rows porperties
     this.rows = [];
     numRows = 6;
-    var rowsbase = 75;
+    var rowsbase = 77;
 
     //set the cols porperties
     this.cols = [];
@@ -24,9 +26,14 @@ var Stage = function(  ){
         this.cols[i] = colsbase * i;
     };
 
+
     // player position in the stage
-    this.playerRow = 5;
-    this.playerColumn = 2;
+    this.playerDefaultRow = 5;
+    this.playerDefaultColumn = 2;
+
+    // player position in the stage
+    this.playerRow = this.playerDefaultRow;
+    this.playerColumn = this.playerDefaultColumn;
 
     // enemies position in the stage
     this.enemies = [];
@@ -44,7 +51,7 @@ var Enemy = function() {
 
     this.generateValues();
 
-    this.collisionArea = { radius: 20 , x: 5 , y: 5 };
+    this.collisionArea = { radius: 40 , x: 50 , y: 100 };
 }
 
 Enemy.prototype.generateValues = function()
@@ -93,22 +100,57 @@ var Player = function( x , y ) {
     this.y = y || 0;
 
     //use circles as detection collision
-    this.collisionArea = { radius: 20 , x: 50 , y: 100 };
+    this.collisionArea = { radius: 30 , x: 50 , y: 110 };
 }
-
-Player.prototype.collisionDet
 
 Player.prototype.update = function( dt ){
 
 }
 
+
+Player.prototype.enemyCollision = function( enemiesArray ){
+    // return true if there is no collition with any object
+    for (var i = enemiesArray.length - 1; i >= 0; i--) {
+        if( checkObjectCollision( this,  enemiesArray[i] ) ) {
+            // Resets the players position if a collision is detected
+            this.reset();
+
+            break;
+        }
+    }
+    
+}
+
+Player.prototype.reset = function (  ) {
+
+    // player position in the stage
+    stage.playerRow = stage.playerDefaultRow;
+    stage.playerColumn = stage.playerDefaultColumn;
+
+    this.x = stage.cols[ stage.playerDefaultColumn ];
+    this.y = stage.rows[ stage.playerDefaultRow ];
+}
+
+var checkObjectCollision = function ( object1, object2 )
+{
+    var dx = (object1.collisionArea.x + object1.x + object1.collisionArea.radius) 
+            - (object2.collisionArea.x + object2.x + object2.collisionArea.radius);
+    
+    var dy = (object1.collisionArea.y + object1.y + object1.collisionArea.radius) 
+            - (object2.collisionArea.y + object2.y + object2.collisionArea.radius);
+
+    var distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < object1.collisionArea.radius + object2.collisionArea.radius) {
+        // collision detected!
+        return true;
+    }
+}
+
+
 Player.prototype.render = function( dt ){
     var sprite = Resources.get(this.sprite);
     ctx.drawImage( sprite , this.x, this.y);
-    ctx.beginPath();
-    ctx.arc( this.collisionArea.x + this.x , this.collisionArea.y + this.y , this.collisionArea.radius , 0, 2 * Math.PI , false );
-    ctx.fill();
-    ctx.stroke();
 }
 
 Player.prototype.handleInput = function( input ){
@@ -152,10 +194,11 @@ Player.prototype.handleInput = function( input ){
 
 var stage = new Stage(  );
 
-var allEnemies = [ new Enemy(), new Enemy(), new Enemy() ];
+var allEnemies = [ new Enemy(), new Enemy(), new Enemy(), new Enemy() ];
 
-var player = new Player( stage.cols[ stage.playerColumn ] ,
-                        stage.rows[ stage.playerRow ] );
+var player = new Player( stage.cols[ stage.playerDefaultColumn ] ,
+                        stage.rows[ stage.playerDefaultRow ] );
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
