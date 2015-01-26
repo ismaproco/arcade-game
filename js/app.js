@@ -41,6 +41,9 @@ var Stage = function(  ){
 
     // enemies position in the stage
     this.enemies = [];
+
+    // game status: "start, active, game over"
+    this.status = 'start';
 }
 
 var Dashboard = function(initialLifes) {
@@ -52,46 +55,71 @@ var Dashboard = function(initialLifes) {
     this.x = 505;
     this.y = 0;
 
-    this.titlePosition = { x: 505, y: 25, width: this.width, height: 30 };
-    this.lifesPosition = { x: 505, y: 55, width: this.width , height: 30 };
+    this.titlePosition = { x: 505, y: 45, width: this.width, height: 30 };
+    this.lifesPosition = { x: 505, y: 75, width: this.width , height: 30 };
 
     this.initialLifes = initialLifes || 3;
     this.currentLifes = 0;
     this.score = 0;
 
+    this.status = 'start';
 }
 
 Dashboard.prototype.update = function( dt ) {
     this.currentLifes = player.lifes;
+    this.status = stage.status;
 }
 
 Dashboard.prototype.render = function() {
+
     // draw background
     // set the background color
     ctx.fillStyle="#000000";
     ctx.fillRect( this.x , this.y , this.width , this.height );
 
+
     // draw game title
     ctx.textAlign="center";
     ctx.fillStyle = "#FF7E00";
-    ctx.font = "bold 28px Arial";
+    ctx.font = "bold 28px Courier";
     ctx.fillText("Nano Frogger", this.titlePosition.x + ( this.titlePosition.width / 2 )
                          , this.titlePosition.y );
 
-    // draw number of lives
-    ctx.textAlign="center";
-    ctx.fillStyle = "white";
-    ctx.font = "bold 18px Arial";
-    ctx.fillText("Remaining lives: " + this.currentLifes + " of " + this.initialLifes, 
-                                this.lifesPosition.x + ( this.lifesPosition.width / 2 )
-                                , this.lifesPosition.y  );
+    switch( this.status )
+    {
+        case 'start':
+
+                        // draw number of lives
+            ctx.textAlign="center";
+            ctx.fillStyle = "white";
+            ctx.font = "bold 18px Courier";
+            ctx.fillText("Press <Enter> to Start", this.lifesPosition.x + ( this.lifesPosition.width / 2 )
+                                        , this.lifesPosition.y + 150 );
+
+        break;
+        case 'active':
+
+            // draw number of lives
+            ctx.textAlign="center";
+            ctx.fillStyle = "white";
+            ctx.font = "bold 18px Courier";
+            ctx.fillText("Remaining lives: " + this.currentLifes + " of " + this.initialLifes, 
+                                        this.lifesPosition.x + ( this.lifesPosition.width / 2 )
+                                        , this.lifesPosition.y  );
 
 
-    // draw the texts of the dashboard
+            // draw the texts of the dashboard
 
-    // draw the score title
+            // draw the score title
 
-    // draw the score value    
+            // draw the score value    
+
+
+        break;
+        case 'game over':
+        break;
+    }
+
 }
 
 
@@ -218,37 +246,62 @@ Player.prototype.render = function( dt ){
 
 Player.prototype.handleInput = function( input ){
 
-    switch(input)
+    var startInput = function( input ) {
+        switch(input)
+        {
+            case 'enter':
+                stage.status = 'active';
+            break;
+        }
+    };
+
+    var activeInput = function( input ) {
+        switch(input)
+        {
+            case 'left':
+                if( stage.playerColumn - 1 > -1 )
+                {
+                    stage.playerColumn--;
+                    player.x = stage.cols[ stage.playerColumn ];    
+                }
+            break;
+            case 'right':
+                if( stage.playerColumn + 1 < stage.cols.length )
+                {
+                    stage.playerColumn++;
+                    player.x = stage.cols[ stage.playerColumn ];
+                }
+            break;
+            case 'up':
+                if( stage.playerRow - 1 > -1 )
+                {
+                    stage.playerRow--;
+                    player.y = stage.rows[ stage.playerRow ];    
+                }
+            break;
+            case 'down':
+                if(stage.playerRow + 1  <  stage.rows.length )
+                {
+                    stage.playerRow++;
+                    player.y = stage.rows[ stage.playerRow ];    
+                }
+            break;
+        }
+    };
+
+    switch( stage.status )
     {
-        case 'left':
-            if( stage.playerColumn - 1 > -1 )
-            {
-                stage.playerColumn--;
-                player.x = stage.cols[ stage.playerColumn ];    
-            }
+        case 'start':
+            startInput( input );
         break;
-        case 'right':
-            if( stage.playerColumn + 1 < stage.cols.length )
-            {
-                stage.playerColumn++;
-                player.x = stage.cols[ stage.playerColumn ];
-            }
+        case 'active':
+            activeInput( input );
         break;
-        case 'up':
-            if( stage.playerRow - 1 > -1 )
-            {
-                stage.playerRow--;
-                player.y = stage.rows[ stage.playerRow ];    
-            }
-        break;
-        case 'down':
-            if(stage.playerRow + 1  <  stage.rows.length )
-            {
-                stage.playerRow++;
-                player.y = stage.rows[ stage.playerRow ];    
-            }
+        case 'game over':
+            startInput( input );
         break;
     }
+
 }
 
 // Now instantiate your objects.
@@ -272,7 +325,8 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        13: 'enter'
     };
 
     console.log( e.keyCode );

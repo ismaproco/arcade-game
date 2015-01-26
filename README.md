@@ -18,9 +18,13 @@ For the colliction detection i search for the most optimal an easy way to implem
 Reset the player position when a collision is detected, the player position is stored in the stage, and there is a default position, so the reset will determine the right location for the reset.
 
 
+
+
 #Extra Mile!
 
-- Create a player life counter indicator, the player start with a number of lifes and they decrease if  a collision is detected.
+- Create a player life counter indicator, the player start with a number of lifes and they decrease if  a collision is detected. [Complete]
+This was done using a player property indicating the number of lifes, and this property was read by the Dashboard and the information its shown in it.
+
 - Create more enemies that move faster that the others. and some of them with diferent sizes.
 - Add a items to pick at the top of the stage.
 - Win points for every picked item that is returned to the right basket.
