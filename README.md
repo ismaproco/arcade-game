@@ -15,8 +15,15 @@ Then I create the Stage object that will help me to set the values of the stage 
 
 For the colliction detection i search for the most optimal an easy way to implement, and i found that circles adjust very well to what i'm trying to do, but there was a problem, the sprites used for the Player and the Enemies are not perfect centered to image, they are rectangles with a big transparent area. So i set a property in the Players and enemies to set the collision area using a Circles.
 
+Reset the player position when a collision is detected, the player position is stored in the stage, and there is a default position, so the reset will determine the right location for the reset.
 
 
+#Extra Mile!
+
+- Create a player life counter indicator, the player start with a number of lifes and they decrease if  a collision is detected.
+- Create more enemies that move faster that the others. and some of them with diferent sizes.
+- Add a items to pick at the top of the stage.
+- Win points for every picked item that is returned to the right basket.
 
 
 
