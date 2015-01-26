@@ -48,25 +48,33 @@ var Stage = function(  ){
 
 var Dashboard = function(initialLifes) {
     // size variables
-    this.height = 606;
+    this.height = 536;
     this.width = 290;
 
     // position variables
     this.x = 505;
-    this.y = 0;
+    this.y = 50;
 
-    this.titlePosition = { x: 505, y: 45, width: this.width, height: 30 };
-    this.lifesPosition = { x: 505, y: 75, width: this.width , height: 30 };
+    this.titlePosition =    { x: 505, y: 100, width: this.width, height: 30 };
+    this.lifesPosition =    { x: 505, y: 125, width: this.width , height: 30 };
+    this.messagesPosition = { x: 505, y: 125, width: this.width , height: 30 };
 
+    // life's variables
     this.initialLifes = initialLifes || 3;
     this.currentLifes = 0;
+
+    //score's variables
     this.score = 0;
 
+    //status's variables
     this.status = 'start';
 }
 
 Dashboard.prototype.update = function( dt ) {
+    // update the number of lifes with the player remaining lifes
     this.currentLifes = player.lifes;
+
+    //update the Dashboard status with the Stage status
     this.status = stage.status;
 }
 
@@ -74,8 +82,10 @@ Dashboard.prototype.render = function() {
 
     // draw background
     // set the background color
-    ctx.fillStyle="#000000";
+    ctx.fillStyle="#fff";
     ctx.fillRect( this.x , this.y , this.width , this.height );
+    ctx.fillStyle="#000000";
+    ctx.fillRect( this.x + 7, this.y , this.width , this.height );
 
 
     // draw game title
@@ -89,12 +99,13 @@ Dashboard.prototype.render = function() {
     {
         case 'start':
 
-                        // draw number of lives
+            // draw number of lives
             ctx.textAlign="center";
             ctx.fillStyle = "white";
             ctx.font = "bold 18px Courier";
-            ctx.fillText("Press <Enter> to Start", this.lifesPosition.x + ( this.lifesPosition.width / 2 )
-                                        , this.lifesPosition.y + 150 );
+            ctx.fillText("Press <Enter> to Start", 
+                        this.messagesPosition.x + ( this.messagesPosition.width / 2 )
+                        , this.messagesPosition.y + 150 );
 
         break;
         case 'active':
@@ -103,9 +114,10 @@ Dashboard.prototype.render = function() {
             ctx.textAlign="center";
             ctx.fillStyle = "white";
             ctx.font = "bold 18px Courier";
-            ctx.fillText("Remaining lives: " + this.currentLifes + " of " + this.initialLifes, 
-                                        this.lifesPosition.x + ( this.lifesPosition.width / 2 )
-                                        , this.lifesPosition.y  );
+            ctx.fillText("Remaining lives: " + 
+                        this.currentLifes + " of " + this.initialLifes,
+                        this.lifesPosition.x + ( this.lifesPosition.width / 2 )
+                        , this.lifesPosition.y  );
 
 
             // draw the texts of the dashboard
@@ -114,9 +126,18 @@ Dashboard.prototype.render = function() {
 
             // draw the score value    
 
-
         break;
         case 'game over':
+            // draw number of lives
+            ctx.textAlign="center";
+            ctx.fillStyle = "white";
+            ctx.font = "bold 18px Courier";
+            ctx.fillText("Game Over", this.messagesPosition.x +
+                        ( this.messagesPosition.width / 2 )
+                        , this.messagesPosition.y + 150 );
+            ctx.fillText("Press <Enter> to try again", this.messagesPosition.x +
+                        ( this.messagesPosition.width / 2 )
+                        , this.messagesPosition.y + 180 );
         break;
     }
 
@@ -192,10 +213,18 @@ var Player = function( x , y , lifes) {
 
     // player lifes
     this.lifes = lifes || 3;
+
+    // player score
+    this.score = 0;
 }
 
 Player.prototype.update = function( dt ){
-
+    if( this.lifes === 0 ) {
+        stage.status = 'game over';
+        
+        // show an action color in a Game Over
+        backgroundActionColor('red');
+    }
 }
 
 
@@ -206,10 +235,13 @@ Player.prototype.enemyCollision = function( enemiesArray ){
             // Resets the players position if a collision is detected
             this.lifes--;
             this.reset();
+
+            // show an action color when a collision is detected
+            backgroundActionColor('yellow');
+
             break;
         }
     }
-    
 }
 
 Player.prototype.reset = function (  ) {
@@ -289,6 +321,19 @@ Player.prototype.handleInput = function( input ){
         }
     };
 
+
+    var gameOverInput = function( input ) {
+        switch(input)
+        {
+            case 'enter':
+                //reset game to the initial values
+                initializeGame();
+                //put the game in active state
+                stage.status = 'active';
+            break;
+        }
+    };
+
     switch( stage.status )
     {
         case 'start':
@@ -298,7 +343,7 @@ Player.prototype.handleInput = function( input ){
             activeInput( input );
         break;
         case 'game over':
-            startInput( input );
+            gameOverInput( input );
         break;
     }
 
@@ -308,15 +353,45 @@ Player.prototype.handleInput = function( input ){
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-var stage = new Stage(  );
+var stage;
+var allEnemies;
+var player;
+var dashboard;
 
-var allEnemies = [ new Enemy(), new Enemy(), new Enemy(), new Enemy() ];
+function initializeGame()
+{
+    //Create the game stage
+    stage = new Stage(  );
 
-var player = new Player( stage.cols[ stage.playerDefaultColumn ] ,
+    //Create the enemies
+    allEnemies = [ new Enemy(), new Enemy(), new Enemy(), new Enemy() ];
+
+    //Create the game player
+    player = new Player( stage.cols[ stage.playerDefaultColumn ] ,
                         stage.rows[ stage.playerDefaultRow ] ,
                         stage.playerStarterlifes );
 
-var dashboard = new Dashboard( stage.playerStarterlifes );
+    //Create the dashboard to show information
+    dashboard = new Dashboard( stage.playerStarterlifes );
+
+    document.bgColor = 'white';
+}
+
+
+function backgroundActionColor( toColor )
+{
+    // change the background color when a collision is detected
+    document.bgColor = toColor;
+
+    // after 200 millis the background goes back to the original color
+    setTimeout(function(){
+        document.bgColor = 'white';                
+    }, 200 );
+}
+
+
+// start the game variables
+initializeGame();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -329,6 +404,5 @@ document.addEventListener('keyup', function(e) {
         13: 'enter'
     };
 
-    console.log( e.keyCode );
     player.handleInput(allowedKeys[e.keyCode]);
 });
