@@ -18,6 +18,7 @@ For the colliction detection i search for the most optimal an easy way to implem
 Reset the player position when a collision is detected, the player position is stored in the stage, and there is a default position, so the reset will determine the right location for the reset.
 
 
+
 #Extra Mile!
 
 - Create a dashboard to show the game status, score and lifes
@@ -29,7 +30,7 @@ This was done using a player property indicating the number of lifes, and this p
 - Create a start, active and game over status, and block the input of other keys aside from enter.
 In the dashboard the stage status is checked, and the screen show relevant information for each one of the statuses.
 
-- Add a score increment if the user reach each one of the upper rows.
+- Add a score increment if the user touch any of the collectibles
 [on it]
 
 - Create more enemies that move faster that the others. and some of them with diferent sizes.
@@ -47,3 +48,6 @@ http://stackoverflow.com/questions/4959975/generate-random-value-between-two-num
 
 Used this url to implement the collition detection algorithym
 https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+
+Image rotation in html5 canvas
+http://www.html5canvastutorials.com/advanced/html5-canvas-transform-rotate-tutorial/

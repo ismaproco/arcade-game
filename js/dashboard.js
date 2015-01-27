@@ -78,7 +78,7 @@ Dashboard.prototype.render = function() {
             };
 
             // draw the score title
-
+            
             // draw the score value    
 
         break;
