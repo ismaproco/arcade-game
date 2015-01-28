@@ -73,6 +73,7 @@ var checkObjectCollision = function ( object1, object2 )
 
 var stage;
 var allEnemies;
+var allCollectibles;
 var player;
 var dashboard;
 
@@ -94,6 +95,8 @@ function initializeGame()
 
     // initialize the background color of the page
     document.bgColor = stage.pageBackgroundColor;
+
+    allCollectibles = [ new Collectible() ];
 }
 
 // change the document background and then return back to the original color

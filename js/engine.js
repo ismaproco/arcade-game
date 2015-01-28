@@ -88,6 +88,10 @@ var Engine = (function(global) {
     {
         // check for the collisions with enemies
         player.enemyCollision( allEnemies );
+
+        // check for the collisions with collectibles
+        player.collectiblesCollision( allCollectibles );
+
     }
 
 
@@ -102,6 +106,11 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+
+        allCollectibles.forEach(function(collectible) {
+            collectible.update( dt );
+        });
+
 
         player.update();
 
@@ -163,6 +172,12 @@ var Engine = (function(global) {
             enemy.render();
         });
 
+        //loop all collectibles to show in the stage
+        allCollectibles.forEach(function(collectible) {
+            collectible.render();
+        });
+
+
         player.render();
 
         dashboard.render();
@@ -189,7 +204,10 @@ var Engine = (function(global) {
         'images/enemy-bug-magnetic.png',
         'images/enemy-bug.png',
         'images/char-boy.png' ,
-        'images/Heart.png' 
+        'images/Heart.png' ,
+        'images/Gem Blue.png' ,
+        'images/Gem Orange.png' ,
+        'images/Gem Green.png' 
     ]);
     Resources.onReady(init);
 

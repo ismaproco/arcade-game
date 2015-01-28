@@ -36,10 +36,13 @@ Player.prototype.enemyCollision = function( enemiesArray ){
     // return true if there is no collition with any object
     for (var i = enemiesArray.length - 1; i >= 0; i--) {
         if( checkObjectCollision( this,  enemiesArray[i] ) ) {
-            // Resets the players position if a collision is detected
+            
+            // decrease the remaining lifes
             this.lifes--;
+            //decrease the score
+            this.score-=50;
+            // Resets the players position if a collision is detected
             this.reset();
-
             // show an action color when a collision is detected
             backgroundActionColor('yellow');
 
@@ -47,6 +50,29 @@ Player.prototype.enemyCollision = function( enemiesArray ){
         }
     }
 }
+
+
+Player.prototype.collectiblesCollision = function( collectiblesArray ){
+
+    // return true if there is no collition with any object
+    for (var i = collectiblesArray.length - 1; i >= 0; i--) {
+        if( checkObjectCollision( this,  collectiblesArray[i] ) ) {
+            // Increase the score
+            this.score+=collectiblesArray[i].score;
+
+            // show an action color when a collision is detected
+            backgroundActionColor(collectiblesArray[i].type);
+
+            // create a new position and type for the collectible
+            collectiblesArray[i].setRandomPosition();
+            collectiblesArray[i].setRandomType();
+
+            break;
+        }
+    }
+}
+
+
 
 Player.prototype.reset = function (  ) {
 

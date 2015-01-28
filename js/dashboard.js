@@ -10,6 +10,7 @@ var Dashboard = function(initialLifes) {
     this.titlePosition =    { x: 505, y: 100, width: this.width, height: 30 };
     this.lifesPosition =    { x: 505, y: 150, width: this.width , height: 30 };
     this.messagesPosition = { x: 510, y: 125, width: this.width , height: 30 };
+    this.scorePosition =    { x: 505, y: 200, width: this.width , height: 30 };
 
     // life's variables
     this.initialLifes = initialLifes || 3;
@@ -78,8 +79,21 @@ Dashboard.prototype.render = function() {
             };
 
             // draw the score title
-            
+
+            ctx.textAlign="center";
+            ctx.fillStyle = "white";
+            ctx.font = "bold 18px Courier";
+            ctx.fillText("Score",
+                        this.scorePosition.x + ( this.scorePosition.width / 2 )
+                        , this.scorePosition.y  );
+
             // draw the score value    
+            ctx.textAlign="center";
+            ctx.fillStyle = "white";
+            ctx.font = "bold 18px Courier";
+            ctx.fillText(player.score,
+                        this.scorePosition.x + ( this.scorePosition.width / 2 )
+                        , this.scorePosition.y + 30 );
 
         break;
         case 'game over':
@@ -93,7 +107,26 @@ Dashboard.prototype.render = function() {
             ctx.fillText("Press <Enter> to try again", this.messagesPosition.x +
                         ( this.messagesPosition.width / 2 )
                         , this.messagesPosition.y + 180 );
+
+            // draw the score title
+
+            ctx.textAlign="center";
+            ctx.fillStyle = "white";
+            ctx.font = "bold 18px Courier";
+            ctx.fillText("Score",
+                        this.scorePosition.x + ( this.scorePosition.width / 2 )
+                        , this.scorePosition.y  );
+
+            // draw the score value    
+            ctx.textAlign="center";
+            ctx.fillStyle = "white";
+            ctx.font = "bold 18px Courier";
+            ctx.fillText(player.score,
+                        this.scorePosition.x + ( this.scorePosition.width / 2 )
+                        , this.scorePosition.y + 30 );
+
         break;
     }
+
 
 }
