@@ -30,12 +30,11 @@ This was done using a player property indicating the number of lifes, and this p
 - Create a start, active and game over status, and block the input of other keys aside from enter.
 In the dashboard the stage status is checked, and the screen show relevant information for each one of the statuses.
 
-- Add a score increment if the user touch any of the collectibles
-[on it]
+- Add a score increment if the player collect any of the collectibles, each gem will increment the player score.
 
-- Create more enemies that move faster that the others. and some of them with diferent sizes.
-- Add a items to pick at the top of the stage.
-- Win points for every picked item that is returned to the right basket.
+- Create more enemies that move faster that the others, each anemy will have an specific sprite, depending of the speed.
+
+- Add a time counter once the game start, if the counter reach 0 seconds left the game is over.
 
 #Live Demo
 http://chitomsa.com/arcade

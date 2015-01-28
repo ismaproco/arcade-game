@@ -11,6 +11,7 @@ var Dashboard = function(initialLifes) {
     this.lifesPosition =    { x: 505, y: 150, width: this.width , height: 30 };
     this.messagesPosition = { x: 510, y: 125, width: this.width , height: 30 };
     this.scorePosition =    { x: 505, y: 200, width: this.width , height: 30 };
+    this.timerPosition =    { x: 505, y: 250, width: this.width , height: 30 };
 
     // life's variables
     this.initialLifes = initialLifes || 3;
@@ -21,16 +22,49 @@ var Dashboard = function(initialLifes) {
 
     //status's variables
     this.status = 'start';
+
+    // duration of the game in seconds
+    this.timer = 30;
+    this.interval;
 }
 
+// update the dashboard information
 Dashboard.prototype.update = function( dt ) {
     // update the number of lifes with the player remaining lifes
     this.currentLifes = player.lifes;
+
+    // set the game over if the player lose all the lifes
+    if( player.lifes === 0 ) {
+        stage.status = 'game over';
+        // show an action color in a Game Over
+        backgroundActionColor('red');
+    }
+
+    // set the game over if the timer is 0
+    if( this.timer === 0 ) {
+        stage.status = 'game over';
+        // show an action color in a Game Over
+        backgroundActionColor('red');
+    }    
 
     //update the Dashboard status with the Stage status
     this.status = stage.status;
 }
 
+// start the dashboard timer
+Dashboard.prototype.startTimer = function() {
+    // handle the hoisting of the this parameter
+    var dashboardObject = this;
+    // clear all the previous intervals
+    clearInterval( this.interval );
+    // create interval which executes the method each second
+    this.interval = setInterval(function(){
+        //decrease the timer with each interval call
+        dashboardObject.timer--;
+    },1000);
+}
+
+// render the dashboard in screen
 Dashboard.prototype.render = function() {
 
     // draw background
@@ -95,6 +129,14 @@ Dashboard.prototype.render = function() {
                         this.scorePosition.x + ( this.scorePosition.width / 2 )
                         , this.scorePosition.y + 30 );
 
+            // draw the timer
+            ctx.textAlign="center";
+            ctx.fillStyle = "white";
+            ctx.font = "bold 18px Courier";
+            ctx.fillText( 'Time Remaining: ' + this.timer ,
+                        this.timerPosition.x + ( this.timerPosition.width / 2 )
+                        , this.timerPosition.y + 30 );
+
         break;
         case 'game over':
             // draw number of lives
@@ -127,6 +169,4 @@ Dashboard.prototype.render = function() {
 
         break;
     }
-
-
 }

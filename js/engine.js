@@ -111,7 +111,6 @@ var Engine = (function(global) {
             collectible.update( dt );
         });
 
-
         player.update();
 
         dashboard.update();

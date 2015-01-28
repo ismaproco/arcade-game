@@ -1,3 +1,4 @@
+// Collectible class
 var Collectible = function Collectibles ( type ) {
 	
 	// collectible position
@@ -8,12 +9,15 @@ var Collectible = function Collectibles ( type ) {
 	this.x = 0;
 	this.y = 0;
 
+	// type argument exists?
 	if( type ) 
 	{
+		//set the type argument
 		this.type = type;	
 	}
 	else 
 	{
+		//create a random type
 		this.setRandomType();
 	}
 	
@@ -24,7 +28,7 @@ var Collectible = function Collectibles ( type ) {
 	this.collisionArea = { radius: 20 , x: 50 , y: 100 };
 }
 
-
+// set a random position for the collectible
 Collectible.prototype.setRandomPosition = function setRandomPosition( ) {
 	// select random column between 0 - 4
 	this.column =  parseInt( Math.random() * 5 );
@@ -36,6 +40,7 @@ Collectible.prototype.setRandomPosition = function setRandomPosition( ) {
 	this.row =  ( parseInt( Math.random() * 11 )  > 5 ) ? 0 : 4;
 }
 
+// set a random type for the collectible
 Collectible.prototype.setRandomType = function setRandomType( ) {
 
 	// array with the collectibles sprites
@@ -47,6 +52,7 @@ Collectible.prototype.setRandomType = function setRandomType( ) {
 	var scores = [ 100, 200, 300 ];
 
 	// select random number between 0 - 3
+	// and use the number to select a type
 	switch( parseInt( Math.random() * 3 ) )
 	{
 		case 0:
@@ -60,6 +66,7 @@ Collectible.prototype.setRandomType = function setRandomType( ) {
 		break;
 	}
 
+	//set the sprite and score based on the type
 	switch( this.type )
 	{
 		case 'blue':
@@ -77,6 +84,7 @@ Collectible.prototype.setRandomType = function setRandomType( ) {
 	}
 }
 
+// render the collectible
 Collectible.prototype.render = function render( ) {
 	// set the position of the collectible
 	this.x = stage.cols[this.column] + 25;
@@ -86,7 +94,7 @@ Collectible.prototype.render = function render( ) {
 	ctx.drawImage( Resources.get(this.sprite) , this.x ,this.y , 50, 85 );
 }
 
+// update the collectible
 Collectible.prototype.update = function update( dt ) {
-	// rotate the collectible in function of time
-
+	
 }

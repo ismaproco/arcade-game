@@ -35,7 +35,6 @@ var Stage = function(  ){
     // player initial values
     this.playerStarterlifes = 7;
 
-
     // enemies position in the stage
     this.enemies = [];
 
@@ -46,6 +45,7 @@ var Stage = function(  ){
     this.pageBackgroundColor = 'white';
 }
 
+// util function to check the object collision of circles
 var checkObjectCollision = function ( object1, object2 )
 {
     var dx = (object1.collisionArea.x + object1.x 
@@ -67,16 +67,14 @@ var checkObjectCollision = function ( object1, object2 )
     }
 }
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-
+// variables to use in the game
 var stage;
 var allEnemies;
 var allCollectibles;
 var player;
 var dashboard;
 
+// initialize all the game variables
 function initializeGame()
 {
     //Create the game stage
@@ -96,6 +94,7 @@ function initializeGame()
     // initialize the background color of the page
     document.bgColor = stage.pageBackgroundColor;
 
+    //create the collectibles in screen
     allCollectibles = [ new Collectible() ];
 }
 

@@ -12,15 +12,19 @@ var Enemy = function() {
     // generate the movement values for each of the enemies
     this.generateMovementValues();
 
+    //set the collision area of the enemy
     this.collisionArea = { radius: 40 , x: 50 , y: 100 };
 }
 
+// create the enemy in one of the rows, with a random speed
 Enemy.prototype.generateMovementValues = function()
 {
+    // set the initial x position to -30 so the enemy will be shown
+    // getting into the stage
+    this.x = -30;
     // set one the position of the enemy randomly to one of
     // the rows.
-    this.x = -30;
-
+    
     //get the random row
     this.y = stage.rows[ Math.floor(Math.random() * 3) + 1 ];
 
@@ -46,6 +50,7 @@ Enemy.prototype.update = function( dt ) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
+    // change the enemy sprite based on the enemy speed
     if ( this.speed < 3 ) {
         ctx.drawImage( Resources.get(this.sprite) , this.x , this.y );    
     }
@@ -54,6 +59,5 @@ Enemy.prototype.render = function() {
     }
     else {
         ctx.drawImage( Resources.get(this.spriteFast) , this.x , this.y );    
-    };;
-    
+    };
 }

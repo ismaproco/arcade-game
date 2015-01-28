@@ -22,13 +22,9 @@ var Player = function( x , y , lifes) {
     this.score = 0;
 }
 
+// Update the player value 
 Player.prototype.update = function( dt ){
-    if( this.lifes === 0 ) {
-        stage.status = 'game over';
-        
-        // show an action color in a Game Over
-        backgroundActionColor('red');
-    }
+    
 }
 
 
@@ -51,7 +47,7 @@ Player.prototype.enemyCollision = function( enemiesArray ){
     }
 }
 
-
+// collectibles collision detection
 Player.prototype.collectiblesCollision = function( collectiblesArray ){
 
     // return true if there is no collition with any object
@@ -72,34 +68,43 @@ Player.prototype.collectiblesCollision = function( collectiblesArray ){
     }
 }
 
-
-
+// Reset the position of the player
 Player.prototype.reset = function (  ) {
 
     // player position in the stage
     stage.playerRow = stage.playerDefaultRow;
     stage.playerColumn = stage.playerDefaultColumn;
 
+    // calculate the position based in the columns and rows
     this.x = stage.cols[ stage.playerDefaultColumn ];
     this.y = stage.rows[ stage.playerDefaultRow ];
 }
 
+// render de player
 Player.prototype.render = function( dt ){
     var sprite = Resources.get(this.sprite);
     ctx.drawImage( sprite , this.x, this.y);
 }
 
+// handle the player input
 Player.prototype.handleInput = function( input ){
 
+    // input for the start state
     var startInput = function( input ) {
         switch(input)
         {
             case 'enter':
                 stage.status = 'active';
+                //start the dashboard timer
+                dashboard.startTimer();
             break;
         }
     };
 
+    // input for the active state
+    //
+    // validate the player movement using the arrow's keys directions
+    // check the current column and row so the player will not get out of bounds
     var activeInput = function( input ) {
         switch(input)
         {
@@ -134,19 +139,22 @@ Player.prototype.handleInput = function( input ){
         }
     };
 
-
+    // input for the game over state
     var gameOverInput = function( input ) {
         switch(input)
         {
             case 'enter':
-                //reset game to the initial values
+                // reset game to the initial values
                 initializeGame();
-                //put the game in active state
+                // put the game in active state
                 stage.status = 'active';
+                //start the dashboard timer
+                dashboard.startTimer();
             break;
         }
     };
 
+    //change the player input based in the stage status
     switch( stage.status )
     {
         case 'start':
